@@ -25,7 +25,7 @@ $users = $stmt->fetchAll();
 $file_name= "files/users.csv";
 $file_handle = fopen($file_name, "w");
 
-if ($users) fputcsv($file_handle, array_keys($users[0]));
+if ($users) fputcsv($file_handle, array_keys($users[0])); //così parto dalla prima riga e mi porto le key(nome,surname...)
 foreach($users as $row) {
     fputcsv($file_handle, $row);
 }
