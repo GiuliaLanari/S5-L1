@@ -58,19 +58,19 @@ $file_name= "files/usersconT.csv";
 //usando INSERT INTO gli dico dove inserire e la stuttura che deve avere (non passo l'ID perche verà generato in automatico)
 //in execute passo i vuovi valori mettendo es. "name"=>$data[1] (metto data= ai dati nel mio file.csv inoltre devo dirgli la posizione [1] ad esempio che corrisponde al nome)
 
-// if($file_handle = fopen($file_name, "r")){
-//     fgetcsv($file_handle);
-//     while ($data = fgetcsv($file_handle, null, "\t")) {
-//         $stmt= $pdo->prepare('INSERT INTO user_date (name, surname, email, age) VALUES ( :name, :surname, :email, :age)');
-//         $stmt->execute([
-//             "name"=> $data[1],
-//             "surname"=> $data[2],
-//             "email"=> $data[3],
-//             "age"=> $data[4],
-//         ]);
-//     }
-//     fclose($file_handle);
-// }
+if($file_handle = fopen($file_name, "r")){
+    fgetcsv($file_handle);
+    while ($data = fgetcsv($file_handle, null, "\t")) {
+        $stmt= $pdo->prepare('INSERT INTO user_date (name, surname, email, age) VALUES ( :name, :surname, :email, :age)');
+        $stmt->execute([
+            "name"=> $data[1],
+            "surname"=> $data[2],
+            "email"=> $data[3],
+            "age"=> $data[4],
+        ]);
+    }
+    fclose($file_handle);
+}
 
 
 
