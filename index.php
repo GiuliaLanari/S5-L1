@@ -17,7 +17,7 @@ $pdo = new PDO($dsn, $user, $pass, $options);
 
 //  esporta i dati dal csv al database //
 
-//CON DIVISORE "," //
+//CON DIVISORE "," e aggiunta di if modo più corretto per formare un export//
 $stmt= $pdo->prepare('SELECT * FROM user_date');
 $stmt->execute();
 $users = $stmt->fetchAll();
@@ -25,10 +25,11 @@ $users = $stmt->fetchAll();
 $file_name= "files/users.csv";
 $file_handle = fopen($file_name, "w");
 
-fputcsv($file_handle, array_keys($users[0]), ",");
-foreach($users as $index => $users){
-    fputcsv($file_handle, $users, ",");
+if ($users) fputcsv($file_handle, array_keys($users[0]));
+foreach($users as $row) {
+    fputcsv($file_handle, $row);
 }
+
 fclose($file_handle);
 
 //CON DIVISORE "\t" //
@@ -51,21 +52,27 @@ fclose($file_handle);
 
 $file_name= "files/usersconT.csv";
 
-$file_handle = fopen($file_name, "r");//con questo mi leggo il file csv
-
+//$file_handle = fopen($file_name, "r"); con questo mi leggo il file csv
+//devo aggiungere un if in modo da verificare se mi trovo in quel caso allora farò il ciclo while
 //con il ciclo while vado a generare data che lo uso per poi aggiungere le informazioni del mio file csv nel mio databade
 //usando INSERT INTO gli dico dove inserire e la stuttura che deve avere (non passo l'ID perche verà generato in automatico)
 //in execute passo i vuovi valori mettendo es. "name"=>$data[1] (metto data= ai dati nel mio file.csv inoltre devo dirgli la posizione [1] ad esempio che corrisponde al nome)
-while ($data = fgetcsv($file_handle, null, "\t")) {
-    $stmt= $pdo->prepare('INSERT INTO user_date (name, surname, email, age) VALUES ( :name, :surname, :email, :age)');
-    $stmt->execute([
-        "name"=> $data[1],
-        "surname"=> $data[2],
-        "email"=> $data[3],
-        "age"=> $data[4],
-    ]);
-}
 
-fclose($file_handle);
+// if($file_handle = fopen($file_name, "r")){
+//     fgetcsv($file_handle);
+//     while ($data = fgetcsv($file_handle, null, "\t")) {
+//         $stmt= $pdo->prepare('INSERT INTO user_date (name, surname, email, age) VALUES ( :name, :surname, :email, :age)');
+//         $stmt->execute([
+//             "name"=> $data[1],
+//             "surname"=> $data[2],
+//             "email"=> $data[3],
+//             "age"=> $data[4],
+//         ]);
+//     }
+//     fclose($file_handle);
+// }
+
+
+
 
 
